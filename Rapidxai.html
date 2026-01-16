@@ -1,0 +1,846 @@
+<html lang="en" class="dark"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rapidxai - Intelligent Voice &amp; Infrastructure</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body {
+font-family: "Inter", sans-serif;
+}
+/* Smooth glowing effects */
+.glow-text {
+text-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+}
+.glass-card {
+background: rgba(10, 10, 10, 0.6);
+backdrop-filter: blur(12px);
+border: 1px solid rgba(255, 255, 255, 0.08);
+box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5),
+0 20px 40px -10px rgba(0, 0, 0, 0.5);
+}
+.glass-card:before {
+content: "";
+position: absolute;
+inset: 0;
+border-radius: inherit;
+padding: 1px;
+background: linear-gradient(
+to bottom,
+rgba(255, 255, 255, 0.15),
+transparent
+);
+-webkit-mask: linear-gradient(#fff 0 0) content-box,
+linear-gradient(#fff 0 0);
+-webkit-mask-composite: xor;
+mask-composite: exclude;
+pointer-events: none;
+}
+/* Custom Scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+display: none;
+}
+/* Animations */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes marquee-reverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+.animate-marquee {
+  animation: marquee 50s linear infinite;
+}
+.animate-marquee-reverse {
+  animation: marquee-reverse 50s linear infinite;
+}
+.pause-on-hover:hover {
+  animation-play-state: paused;
+}
+
+/* Hero Grid Animation - Kept in styles but not used in HTML per request */
+.hero-bg {
+    background-size: 50px 50px;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+    -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+}
+@keyframes beam {
+    0%, 100% { opacity: 0; transform: translateY(-50%) translateX(-50%) rotate(45deg) scale(0.5); }
+    50% { opacity: 1; transform: translateY(-50%) translateX(-50%) rotate(45deg) scale(1.5); }
+}
+.grid-beam {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.8), transparent);
+    animation: beam 8s ease-in-out infinite;
+    filter: blur(8px);
+    opacity: 0;
+}
+</style>
+<link id="all-fonts-link-font-manrope" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap">
+<style id="border-gradient-shared-style">
+[style*="--border-gradient"]::before {
+content: "";
+position: absolute;
+inset: 0;
+padding: 1px;
+border-radius: var(--border-radius-before, inherit);
+-webkit-mask: linear-gradient(#fff 0 0) content-box,
+linear-gradient(#fff 0 0);
+-webkit-mask-composite: xor;
+mask-composite: exclude;
+background: var(--border-gradient);
+pointer-events: none;
+}
+</style>
+<style class="">
+@keyframes animationIn {
+0% { opacity: 0; transform: translateY(30px); filter: blur(8px); }
+100% { opacity: 1; transform: translateY(0); filter: blur(0px); }
+}
+</style>
+<script>
+(function () {
+const style = document.createElement("style");
+style.textContent = `
+.animate-on-scroll { animation-play-state: paused !important; }
+.animate-on-scroll.animate { animation-play-state: running !important; }
+`;
+document.head.appendChild(style);
+const once = true;
+if (!window.__inViewIO) {
+window.__inViewIO = new IntersectionObserver((entries) => {
+entries.forEach((entry) => {
+if (entry.isIntersecting) {
+entry.target.classList.add("animate");
+if (once) window.__inViewIO.unobserve(entry.target);
+}
+});
+}, { threshold: 0.2, rootMargin: "0px 0px -10% 0px" });
+}
+window.initInViewAnimations = function (selector = ".animate-on-scroll") {
+document.querySelectorAll(selector).forEach((el) => {
+window.__inViewIO.observe(el);
+});
+};
+document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
+})();
+</script></head>
+
+  <body class="min-h-screen overflow-x-hidden selection:bg-indigo-900 selection:text-white text-neutral-300 bg-[#000000] relative font-sans">
+    
+    <!-- Navigation -->
+    <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-50">
+      <div class="glass-card rounded-full p-1.5 pl-2 pr-2 flex items-center gap-1 [animation:animationIn_0.8s_ease-out_0s_both] animate-on-scroll">
+        <!-- Logo Icon -->
+        <div class="flex text-white bg-gradient-to-br from-white/10 to-white/5 w-9 h-9 border-white/10 border rounded-full items-center justify-center shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" viewBox="0 0 24 24" data-icon="lucide:mic-2" class="iconify text-lg iconify--lucide">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3M19 10v2a7 7 0 0 1-14 0v-2m8 11v3m-4 0h8"></path>
+          </svg>
+        </div>
+
+        <!-- Brand Name -->
+        <span class="text-sm font-semibold text-white tracking-tight ml-2 mr-4">Rapidxai</span>
+
+        <!-- Links -->
+        <div class="hidden md:flex items-center px-2 gap-6 border-l border-white/10 h-6">
+          <a href="#" class="text-sm font-medium text-white hover:text-neutral-200 transition-colors ml-4">
+            Services
+          </a>
+          <a href="#" class="text-sm font-medium text-neutral-400 hover:text-white transition-colors">
+            Methodology
+          </a>
+          <a href="#" class="text-sm font-medium text-neutral-400 hover:text-white transition-colors">
+            Results
+          </a>
+          <a href="#" class="text-sm font-medium text-neutral-400 hover:text-white transition-colors mr-4">
+            Contact
+          </a>
+        </div>
+
+        <!-- CTA -->
+        <button class="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full px-4 py-2 transition-all group">
+          <span class="text-sm font-medium text-white">Book Discovery</span>
+          <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" viewBox="0 0 24 24" data-icon="lucide:arrow-right" class="iconify text-white group-hover:translate-x-0.5 transition-transform iconify--lucide">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7-7l7 7l-7 7"></path>
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex flex-col h-[900px] z-10 w-full pt-32 pr-4 pb-20 pl-4 relative items-center justify-center overflow-hidden">
+      
+      <!-- Aura Background Animation (Replaced) -->
+      <div class="aura-background-component absolute inset-0 -z-10 saturate-150 hue-rotate-15 pointer-events-none" data-alpha-mask="82" style="mask-image: linear-gradient(to bottom, transparent, black 0%, black 82%, transparent); -webkit-mask-image: linear-gradient(to bottom, transparent, black 0%, black 82%, transparent)">
+        <div data-us-project="OGV3DwiIWxPelWFZjtEu" class="absolute w-full h-full left-0 top-0 -z-10"></div>
+        <script type="text/javascript">
+          !function(){if(!window.UnicornStudio){window.UnicornStudio={isInitialized:!1};var i=document.createElement("script");i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.34/dist/unicornStudio.umd.js",i.onload=function(){window.UnicornStudio.isInitialized||(UnicornStudio.init(),window.UnicornStudio.isInitialized=!0)},(document.head || document.body).appendChild(i)}}();
+        </script>
+      </div>
+      <!-- Ambient Background Glow -->
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[80rem] h-[50rem] bg-indigo-900/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[40rem] bg-violet-500/5 rounded-full blur-[100px] pointer-events-none z-0"></div>
+
+      <!-- Custom Animation Styles -->
+      <style class="">
+        @keyframes aura-float-1 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+        @keyframes aura-float-2 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+        @keyframes aura-float-3 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
+      </style>
+
+      <!-- Badge -->
+      <div class="flex gap-2 glass-card bg-indigo-950/20 border-indigo-500/20 rounded-full mt-8 pt-1.5 pr-4 pb-1.5 pl-4 items-center [animation:animationIn_0.8s_ease-out_0.2s_both] animate-on-scroll relative z-20">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" viewBox="0 0 24 24" data-icon="lucide:user" class="iconify text-indigo-400 iconify--lucide">
+          <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </g>
+        </svg>
+        <span class="text-sm font-medium text-indigo-100">
+          Led by Shreyas Raj
+        </span>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="mt-8 text-center text-[11vw] md:text-[6.5rem] font-semibold tracking-[-0.04em] leading-[0.9] bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/40 glow-text z-20 relative [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll">
+        <span class="block">INTELLIGENT VOICE.</span>
+        <span class="block text-white/60">SCALABLE INFRASTRUCTURE.</span>
+      </h1>
+
+      <!-- Description -->
+      <p class="mt-8 text-lg md:text-xl text-neutral-400 text-center max-w-2xl leading-relaxed font-normal [animation:animationIn_0.8s_ease-out_0.4s_both] animate-on-scroll relative z-20">
+        We build production-ready MVPs and deploy human-level AI voice agents. Validate your market before you burn your budget.
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-col sm:flex-row mt-10 gap-x-4 gap-y-4 items-center [animation:animationIn_0.8s_ease-out_0.5s_both] animate-on-scroll relative z-20">
+        <!-- Primary CTA -->
+        <button class="group flex hover:bg-indigo-900/20 transition-all duration-300 bg-gradient-to-b from-blue-500/10 via-blue-500/0 to-blue-500/10 w-auto border-white/10 border rounded-full pt-2 pr-8 pb-2 pl-2 relative shadow-[0_8px_30px_rgb(0,0,0,0.12)] backdrop-blur-2xl gap-x-4 gap-y-4 items-center overflow-hidden">
+          <div class="absolute inset-0 rounded-full" style="-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; padding: 1px; pointer-events: none;">
+            <div class="absolute -inset-[100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0_300deg,#5E5CE6_360deg)]"></div>
+          </div>
+          <div class="relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#5E5CE6] text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_4px_10px_rgba(94,92,230,0.3)]">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1.2em" height="1.2em" viewBox="0 0 24 24" data-icon="lucide:phone-call" class="iconify iconify--lucide">
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.05 2a9 9 0 0 1 8 7.94"></path>
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.05 6A5 5 0 0 1 18 10"></path>
+            </svg>
+          </div>
+          <span class="relative z-10 text-base font-medium text-white tracking-tight">
+            Book Discovery Call
+          </span>
+        </button>
+
+        <!-- Secondary CTA -->
+        <button class="flex items-center gap-2 text-neutral-400 hover:text-white transition-all px-4 py-2 border border-white/10 hover:border-white/20 hover:bg-white/5 rounded-full">
+          <span class="text-sm font-medium">Strategy Deep-Dive ($250)</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>
+        </button>
+      </div>
+
+      <!-- CARD 1: Top Left (Visualizing Voice Input) -->
+      <div class="hidden lg:block glass-card w-72 rounded-2xl pt-4 pr-4 pb-4 pl-4 absolute top-[15%] left-[10%] z-10" style="animation: aura-float-1 8s ease-in-out infinite;">
+        <div class="flex mb-4 items-center justify-between">
+          <span class="text-xs font-medium text-neutral-400">
+            Incoming Channel
+          </span>
+          <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>
+        </div>
+        <div class="w-full bg-neutral-900/50 border border-indigo-500/30 rounded-lg p-2.5 flex items-center justify-between mb-3 shadow-[0_0_15px_-3px_rgba(99,102,241,0.1)]">
+          <div class="flex items-center gap-2.5">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" viewBox="0 0 24 24" data-icon="lucide:mic" class="iconify text-indigo-400 iconify--lucide">
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="23"></line>
+              <line x1="8" y1="23" x2="16" y2="23"></line>
+            </svg>
+            <span class="text-sm text-white font-medium">Voice Stream</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-500">LIVE</span>
+        </div>
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <div class="w-1 h-8 rounded-full bg-indigo-500 animate-pulse"></div>
+            <div class="w-1 h-5 rounded-full bg-indigo-500/50"></div>
+            <div class="w-1 h-10 rounded-full bg-indigo-500/80 animate-pulse delay-75"></div>
+            <div class="w-1 h-6 rounded-full bg-indigo-500/40"></div>
+            <div class="w-1 h-4 rounded-full bg-indigo-500/60"></div>
+            <div class="w-1 h-9 rounded-full bg-indigo-500 animate-pulse delay-150"></div>
+            <div class="w-full h-px bg-white/5 ml-2"></div>
+          </div>
+          <div class="text-[10px] text-neutral-500 font-mono mt-2">
+            Transcribing audio packets...
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 2: Top Right (AI Models) -->
+      <div class="hidden lg:block absolute right-[10%] top-[20%] w-64 glass-card rounded-2xl p-1.5 space-y-1 z-10" style="animation: aura-float-2 9s ease-in-out infinite 1s;">
+        <!-- Item 1 -->
+        <div class="group flex items-center gap-3 p-3 rounded-xl border border-white/5 bg-neutral-900/40 hover:border-violet-500/30 transition-all cursor-pointer">
+          <div class="w-8 h-8 rounded-lg bg-neutral-800 flex items-center justify-center border border-white/5 group-hover:bg-violet-500/10 group-hover:text-violet-400 transition-colors">
+             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-medium">Identify Intent</span>
+            <span class="text-[10px] text-neutral-500">LLM Classifier</span>
+          </div>
+        </div>
+        <!-- Item 2 -->
+        <div class="group flex items-center gap-3 p-3 rounded-xl border border-white/5 bg-neutral-900/40 hover:border-pink-500/30 transition-all cursor-pointer">
+          <div class="w-8 h-8 rounded-lg bg-neutral-800 flex items-center justify-center border border-white/5 group-hover:bg-pink-500/10 group-hover:text-pink-400 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-database"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5v14a9 3 0 0 0 18 0V5"></path><path d="M3 12a9 3 0 0 0 18 0"></path></svg>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-medium">Sync CRM</span>
+            <span class="text-[10px] text-neutral-500">Salesforce / HubSpot</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 3: Bottom Left (Logic) -->
+      <div class="hidden lg:block glass-card w-72 rounded-2xl pt-5 pr-5 pb-5 pl-5 absolute bottom-[5%] left-[12%] z-10" style="animation: 10s ease-in-out 2s infinite normal none running aura-float-3;">
+        <!-- Root Node -->
+        <div class="relative z-10 flex items-center gap-3 p-3 rounded-xl border border-white/10 bg-neutral-900 shadow-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-split text-neutral-400"><path d="M16 3h5v5"></path><path d="M8 3H3v5"></path><path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3"></path><path d="m15 9 6-6"></path></svg>
+          <span class="text-sm font-medium">Qualification Logic</span>
+        </div>
+
+        <!-- Connecting Lines Container -->
+        <div class="pl-4 py-2 space-y-2 relative">
+          <!-- Vertical Line -->
+          <div class="absolute left-[29px] top-0 bottom-6 w-px bg-white/10"></div>
+
+          <!-- Branch 1 (Active) -->
+          <div class="relative flex items-center">
+            <!-- Curve -->
+            <div class="w-4 h-6 border-b border-l border-white/10 rounded-bl-xl absolute -left-[3px] -top-3"></div>
+
+            <div class="ml-6 w-full relative group">
+              <div class="text-[10px] uppercase font-bold text-indigo-500/80 mb-1 tracking-wider ml-1">
+                If Qualified Lead
+              </div>
+              <div class="flex items-center justify-between p-2.5 rounded-lg border border-indigo-500/30 bg-indigo-950/20">
+                <div class="flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-check text-indigo-400"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="m9 16 2 2 4-4"></path></svg>
+                  <span class="text-sm font-medium text-indigo-100">
+                    Book Meeting
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Section 2: Value Proposition -->
+    <section class="md:px-10 overflow-hidden bg-neutral-950 w-full max-w-7xl border-white/5 border rounded-3xl mt-24 mr-auto ml-auto pt-24 pr-6 pb-24 pl-6 relative">
+      <div class="-translate-x-1/2 z-0 pointer-events-none select-none text-center w-full absolute top-24 left-1/2" style="mask-image: linear-gradient(180deg, transparent, black 0%, black 60%, transparent); -webkit-mask-image: linear-gradient(180deg, transparent, black 0%, black 60%, transparent);">
+        <span class="text-[12vw] lg:text-[15rem] leading-none whitespace-nowrap font-bold text-white/5 tracking-tighter font-manrope">
+          Value
+        </span>
+      </div>
+
+      <div class="flex flex-col lg:flex-row text-left z-10 mb-20 relative gap-x-8 gap-y-8 justify-between [animation:animationIn_0.8s_ease-out_0.2s_both] animate-on-scroll">
+        <div class="max-w-2xl lg:text-left">
+          <h2 class="leading-[1.05] md:text-6xl text-5xl font-bold text-white tracking-tight">
+            Why Partner With Us?
+          </h2>
+        </div>
+        <div class="max-w-md lg:text-right">
+          <p class="md:text-lg leading-relaxed text-base font-light text-neutral-400">
+            We turn "we should" into "we shipped".
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 z-10 mt-32 pt-0 relative gap-x-8 gap-y-6">
+        
+        <!-- Card 1: Velocity -->
+        <div class="group flex flex-col transition-all duration-500 overflow-hidden shadow-black/50 bg-gradient-to-r from-white/10 to-white/0 h-[480px] rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-2xl backdrop-blur-md [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll" style="position: relative; --border-gradient: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)); --border-radius-before: 16px">
+          <style>
+            @keyframes draw-chart-line { 0% { stroke-dashoffset: 1000; } 100% { stroke-dashoffset: 0; } }
+            @keyframes fade-in-chart { 0% { opacity: 0; } 100% { opacity: 1; } }
+            .animate-draw-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: draw-chart-line 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+            .animate-chart-fill { opacity: 0; animation: fade-in-chart 1.5s ease-out 0.5s forwards; }
+          </style>
+
+          <div class="overflow-hidden flex-1 bg-gradient-to-br from-black/10 to-black/0 w-full rounded-xl mb-4 relative" style="position: relative; --border-gradient: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)); --border-radius-before: 12px">
+            <div class="absolute top-4 left-4 px-3 py-1.5 bg-black/70 border border-white/10 rounded-full text-xs text-white shadow-xl backdrop-blur-sm z-20 flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>Weeks, not quarters</span>
+            </div>
+             <!-- SVG Graph representing Speed/Growth -->
+             <svg class="absolute top-0 right-0 bottom-0 left-0 w-full h-full" viewBox="0 0 500 260" preserveAspectRatio="none">
+              <!-- Grid -->
+              <g stroke="#636b7a" stroke-width="0.5" opacity="0.15">
+                <path d="M0 50 H500"></path><path d="M0 100 H500"></path><path d="M0 150 H500"></path><path d="M0 200 H500"></path>
+                <path d="M100 0 V260"></path><path d="M200 0 V260"></path><path d="M300 0 V260"></path><path d="M400 0 V260"></path>
+              </g>
+              <!-- Curve -->
+              <path d="M0,220 C100,220 150,200 200,150 C250,100 300,50 500,20" fill="none" stroke="#818cf8" stroke-width="3" class="animate-draw-line"></path>
+              <path d="M0,220 C100,220 150,200 200,150 C250,100 300,50 500,20 L500,260 L0,260 Z" fill="#6366f1" fill-opacity="0.1" class="animate-chart-fill"></path>
+            </svg>
+          </div>
+          <div class="z-20 pt-4 pr-4 pb-4 pl-4 relative">
+            <h3 class="text-2xl font-semibold text-white tracking-tight mb-2">Velocity</h3>
+            <p class="text-sm text-neutral-400 leading-relaxed font-light">
+              Weeks, not quarters. We specialize in turning "we should" conversations into "we shipped" reality.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 2: Security -->
+        <div class="group flex flex-col transition-all duration-500 overflow-hidden shadow-black/50 bg-gradient-to-r from-white/10 to-white/0 h-[480px] rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-2xl backdrop-blur-md [animation:animationIn_0.8s_ease-out_0.4s_both] animate-on-scroll" style="position: relative; --border-gradient: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)); --border-radius-before: 16px">
+          <div class="flex-1 bg-neutral-950/40 rounded-lg flex items-center justify-center relative" style="position: relative; --border-gradient: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)); --border-radius-before: 8px">
+             <!-- Lock Visual -->
+             <div class="w-32 h-32 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center relative">
+               <div class="absolute inset-0 rounded-full animate-ping opacity-20 bg-indigo-500"></div>
+               <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check text-indigo-400"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+             </div>
+             <div class="absolute bottom-8 text-xs font-mono text-indigo-300 bg-indigo-900/30 px-3 py-1 rounded border border-indigo-500/30">
+               ENCRYPTION: AES-256
+             </div>
+          </div>
+          <div class="z-20 pt-4 pr-4 pb-4 pl-4 relative">
+            <h3 class="text-2xl font-semibold text-white tracking-tight mb-2">Security</h3>
+            <p class="text-sm text-neutral-400 leading-relaxed font-light">
+              SOC2-ready processes with end-to-end encryption. Enterprise-grade protection for your data.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 3: Clarity -->
+        <div class="group flex flex-col transition-all duration-500 overflow-hidden shadow-black/50 bg-gradient-to-r from-white/10 to-white/0 h-[480px] rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-2xl backdrop-blur-md [animation:animationIn_0.8s_ease-out_0.5s_both] animate-on-scroll" style="position: relative; --border-gradient: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)); --border-radius-before: 16px">
+          <div class="flex-1 overflow-hidden bg-neutral-950/40 rounded-lg p-6 flex flex-col justify-end" style="position: relative; --border-gradient: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)); --border-radius-before: 8px">
+             <!-- Analytics Bars Visual -->
+             <div class="flex items-end justify-between h-40 gap-2">
+               <div class="w-full bg-neutral-800/50 rounded-t-sm h-[40%] group-hover:bg-indigo-500/20 transition-colors duration-500"></div>
+               <div class="w-full bg-neutral-800/50 rounded-t-sm h-[60%] group-hover:bg-indigo-500/30 transition-colors duration-500"></div>
+               <div class="w-full bg-neutral-800/50 rounded-t-sm h-[30%] group-hover:bg-indigo-500/20 transition-colors duration-500"></div>
+               <div class="w-full bg-neutral-800/50 rounded-t-sm h-[80%] group-hover:bg-indigo-500/40 transition-colors duration-500 relative">
+                 <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-white text-black text-[10px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">ROI</div>
+               </div>
+               <div class="w-full bg-neutral-800/50 rounded-t-sm h-[50%] group-hover:bg-indigo-500/20 transition-colors duration-500"></div>
+               <div class="w-full bg-neutral-800/50 rounded-t-sm h-[70%] group-hover:bg-indigo-500/30 transition-colors duration-500"></div>
+             </div>
+          </div>
+          <div class="z-20 mt-2 pt-4 pr-4 pb-4 pl-4 relative">
+            <h3 class="text-2xl font-semibold text-white tracking-tight mb-2">Clarity</h3>
+            <p class="text-sm text-neutral-400 leading-relaxed font-light">
+              Real-time analytics and transparent ROI. Measure the impact of automation immediately.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Services (Replaced Integrations Section) -->
+    <section class="overflow-hidden md:px-10 md:pb-0 bg-neutral-950 w-full max-w-7xl border-white/5 border rounded-3xl mt-24 mr-auto ml-auto pt-24 pr-6 pb-24 pl-6 relative">
+      <!-- Background Text Layer -->
+      <div class="-translate-x-1/2 z-0 pointer-events-none select-none text-center w-full absolute top-24 left-1/2" style="mask-image: linear-gradient(180deg, transparent, black 0%, black 60%, transparent); -webkit-mask-image: linear-gradient(180deg, transparent, black 0%, black 60%, transparent);">
+        <span class="text-[10vw] lg:text-[12rem] leading-none whitespace-nowrap font-bold text-white/5 tracking-tighter font-manrope">
+          Services
+        </span>
+      </div>
+
+      <div class="z-10 relative">
+        <div class="z-10 flex flex-col lg:flex-row gap-8 text-left mb-20 relative gap-x-8 gap-y-8 justify-between [animation:animationIn_0.8s_ease-out_0.2s_both] animate-on-scroll">
+          <div class="max-w-2xl">
+            <h2 class="md:text-6xl leading-tight text-5xl font-semibold text-white tracking-tight">
+              Our Expertise
+            </h2>
+          </div>
+          <div class="max-w-md">
+            <p class="leading-relaxed text-lg font-light text-neutral-400">
+              Two core offerings designed for speed, scale, and market validation.
+            </p>
+          </div>
+        </div>
+
+        <section class="overflow-visible max-w-7xl mr-auto ml-auto pt-10 pr-6 pb-24 pl-6 relative">
+          <!-- Glass Panel Styles -->
+          <style>
+            .glass-panel {
+              background: rgba(15, 15, 15, 0.6);
+              backdrop-filter: blur(12px);
+              border: 1px solid rgba(255, 255, 255, 0.05);
+            }
+            .glass-panel:hover {
+              border-color: rgba(255, 255, 255, 0.1);
+              background: rgba(20, 20, 20, 0.8);
+            }
+          </style>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 z-10 md:px-0 w-full pr-4 pl-4 relative gap-x-6 gap-y-6">
+            <!-- Service 1 -->
+            <div class="glass-panel rounded-2xl p-8 relative group transition-all duration-300 [animation:animationIn_0.8s_ease-out_0.5s_both] animate-on-scroll min-h-[300px] flex flex-col justify-between">
+              <!-- Glow -->
+              <div class="absolute -top-px left-1/2 -translate-x-1/2 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent opacity-100 transition-opacity duration-500"></div>
+
+              <div>
+                <div class="w-14 h-14 rounded-xl bg-[#1a1a1a] border border-white/10 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform mb-6 text-indigo-400">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mic-activity"><path d="M12 2v20"></path><path d="M8 9v6"></path><path d="M4 11v2"></path><path d="M16 9v6"></path><path d="M20 11v2"></path></svg>
+                </div>
+                <h3 class="text-2xl font-semibold text-white mb-2">AI Voice Intelligence</h3>
+                <p class="text-lg text-white/70 mb-4">Your always-on receptionist and SDR.</p>
+                <ul class="space-y-3 text-neutral-400 font-light text-sm">
+                  <li class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    Inbound qualification &amp; Outbound engagement
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    CRM-native syncing
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    Natural dialogue &amp; Graceful handoff
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Service 2 -->
+            <div class="glass-panel rounded-2xl p-8 relative group transition-all duration-300 [animation:animationIn_0.8s_ease-out_0.6s_both] animate-on-scroll min-h-[300px] flex flex-col justify-between">
+              <!-- Glow -->
+              <div class="absolute -top-px left-1/2 -translate-x-1/2 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-purple-500/50 to-transparent opacity-100 transition-opacity duration-500"></div>
+
+              <div>
+                <div class="w-14 h-14 rounded-xl bg-[#1a1a1a] border border-white/10 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform mb-6 text-purple-400">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rocket"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.1 2.75-2 4-2a22 22 0 0 1-2 1z"></path><path d="M12 15v5s3.03-.55 4-2c1.1-1.62 2-2.75 2-4a22 22 0 0 1-1 2z"></path></svg>
+                </div>
+                <h3 class="text-2xl font-semibold text-white mb-2">MVP &amp; Micro-SaaS</h3>
+                <p class="text-lg text-white/70 mb-4">Engineering momentum.</p>
+                <ul class="space-y-3 text-neutral-400 font-light text-sm">
+                  <li class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    Scalable architecture &amp; Modern UI
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    Conversion optimization
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    Validated market fit without technical debt
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- Section 4: Methodology -->
+    <section class="max-w-7xl mx-auto px-6 mt-32 mb-32">
+        <div class="mb-16">
+          <h2 class="text-4xl font-bold text-white tracking-tight mb-4">The Methodology</h2>
+          <p class="text-neutral-400">Our proven process from concept to conversion.</p>
+        </div>
+        
+        <div class="relative">
+          <!-- Horizontal Line -->
+          <div class="absolute top-[24px] left-0 w-full h-px bg-white/10 hidden md:block z-0"></div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+            <!-- Step 1 -->
+            <div class="group">
+              <div class="w-12 h-12 rounded-full bg-neutral-900 border border-white/20 flex items-center justify-center text-white font-bold mb-6 group-hover:border-indigo-500 group-hover:text-indigo-400 transition-colors relative z-10">1</div>
+              <h3 class="text-xl font-semibold text-white mb-2">Discover</h3>
+              <p class="text-sm text-neutral-400 leading-relaxed">Defining economics and jobs-to-be-done.</p>
+            </div>
+            <!-- Step 2 -->
+             <div class="group">
+              <div class="w-12 h-12 rounded-full bg-neutral-900 border border-white/20 flex items-center justify-center text-white font-bold mb-6 group-hover:border-indigo-500 group-hover:text-indigo-400 transition-colors relative z-10">2</div>
+              <h3 class="text-xl font-semibold text-white mb-2">Design</h3>
+              <p class="text-sm text-neutral-400 leading-relaxed">Frictionless conversation maps and product flows.</p>
+            </div>
+            <!-- Step 3 -->
+             <div class="group">
+              <div class="w-12 h-12 rounded-full bg-neutral-900 border border-white/20 flex items-center justify-center text-white font-bold mb-6 group-hover:border-indigo-500 group-hover:text-indigo-400 transition-colors relative z-10">3</div>
+              <h3 class="text-xl font-semibold text-white mb-2">Build</h3>
+              <p class="text-sm text-neutral-400 leading-relaxed">Tight sprints. Your stack, your rules.</p>
+            </div>
+            <!-- Step 4 -->
+             <div class="group">
+              <div class="w-12 h-12 rounded-full bg-neutral-900 border border-white/20 flex items-center justify-center text-white font-bold mb-6 group-hover:border-indigo-500 group-hover:text-indigo-400 transition-colors relative z-10">4</div>
+              <h3 class="text-xl font-semibold text-white mb-2">Deploy</h3>
+              <p class="text-sm text-neutral-400 leading-relaxed">Ship, instrument, and iterate based on conversion data.</p>
+            </div>
+          </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Marquee Testimonials -->
+    <section class="overflow-hidden bg-neutral-950 w-full pt-24 pb-24 relative">
+      <div class="max-w-7xl mx-auto px-6 mb-16 relative z-10">
+        <h2 class="text-5xl font-bold text-white tracking-tight mb-4 text-center">Loved by Founders</h2>
+        <p class="text-neutral-400 text-center text-lg">Trusted by the fastest growing companies.</p>
+      </div>
+
+      <!-- Marquee Container -->
+      <div class="relative w-full overflow-hidden space-y-8">
+        <!-- Fade Masks -->
+        <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-neutral-950 to-transparent z-10 pointer-events-none"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-neutral-950 to-transparent z-10 pointer-events-none"></div>
+
+        <!-- Row 1: Left -->
+        <div class="flex animate-marquee gap-6 w-max pause-on-hover">
+          <!-- Card 1 -->
+          <div class="w-[400px] glass-card rounded-xl p-6 flex flex-col justify-between shrink-0">
+            <p class="text-neutral-300 font-light leading-relaxed mb-6">"Rapidxai cut our qualification time by 80%. The voice AI sounds indistinguishable from a human SDR."</p>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center text-white font-bold text-sm">SC</div>
+              <div>
+                <div class="text-white font-medium text-sm">Sarah Chen</div>
+                <div class="text-neutral-500 text-xs">CEO @ TechScale</div>
+              </div>
+            </div>
+          </div>
+          <!-- Card 2 -->
+          <div class="w-[400px] glass-card rounded-xl p-6 flex flex-col justify-between shrink-0">
+             <p class="text-neutral-300 font-light leading-relaxed mb-6">"The velocity is insane. They went from concept to a working MVP in 3 weeks. Market validation secured."</p>
+             <div class="flex items-center gap-3">
+               <div class="w-10 h-10 rounded-full bg-indigo-900/50 flex items-center justify-center text-indigo-200 font-bold text-sm">MR</div>
+               <div>
+                 <div class="text-white font-medium text-sm">Mike Rodriguez</div>
+                 <div class="text-neutral-500 text-xs">Founder @ DataFlow</div>
+               </div>
+             </div>
+           </div>
+           <!-- Card 3 -->
+           <div class="w-[400px] glass-card rounded-xl p-6 flex flex-col justify-between shrink-0">
+             <p class="text-neutral-300 font-light leading-relaxed mb-6">"Finally, a team that gets it. No bloat, just production-ready code and scalable infrastructure."</p>
+             <div class="flex items-center gap-3">
+               <div class="w-10 h-10 rounded-full bg-purple-900/50 flex items-center justify-center text-purple-200 font-bold text-sm">RM</div>
+               <div>
+                 <div class="text-white font-medium text-sm">Ryan Martinez</div>
+                 <div class="text-neutral-500 text-xs">CTO @ InnovateAI</div>
+               </div>
+             </div>
+           </div>
+           <!-- Card 4 -->
+           <div class="w-[400px] glass-card rounded-xl p-6 flex flex-col justify-between shrink-0">
+             <p class="text-neutral-300 font-light leading-relaxed mb-6">"The inbound voice agent handles 500 calls a day seamlessly. It's like printing money."</p>
+             <div class="flex items-center gap-3">
+               <div class="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center text-white font-bold text-sm">JL</div>
+               <div>
+                 <div class="text-white font-medium text-sm">Jessica Lee</div>
+                 <div class="text-neutral-500 text-xs">VP Sales @ GrowthCo</div>
+               </div>
+             </div>
+           </div>
+           
+           <!-- Duplicate for seamless loop -->
+           <div class="w-[400px] glass-card rounded-xl p-6 flex flex-col justify-between shrink-0">
+            <p class="text-neutral-300 font-light leading-relaxed mb-6">"Rapidxai cut our qualification time by 80%. The voice AI sounds indistinguishable from a human SDR."</p>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center text-white font-bold text-sm">SC</div>
+              <div>
+                <div class="text-white font-medium text-sm">Sarah Chen</div>
+                <div class="text-neutral-500 text-xs">CEO @ TechScale</div>
+              </div>
+            </div>
+          </div>
+          <div class="w-[400px] glass-card rounded-xl p-6 flex flex-col justify-between shrink-0">
+             <p class="text-neutral-300 font-light leading-relaxed mb-6">"The velocity is insane. They went from concept to a working MVP in 3 weeks. Market validation secured."</p>
+             <div class="flex items-center gap-3">
+               <div class="w-10 h-10 rounded-full bg-indigo-900/50 flex items-center justify-center text-indigo-200 font-bold text-sm">MR</div>
+               <div>
+                 <div class="text-white font-medium text-sm">Mike Rodriguez</div>
+                 <div class="text-neutral-500 text-xs">Founder @ DataFlow</div>
+               </div>
+             </div>
+           </div>
+           <div class="w-[400px] glass-card rounded-xl p-6 flex flex-col justify-between shrink-0">
+             <p class="text-neutral-300 font-light leading-relaxed mb-6">"Finally, a team that gets it. No bloat, just production-ready code and scalable infrastructure."</p>
+             <div class="flex items-center gap-3">
+               <div class="w-10 h-10 rounded-full bg-purple-900/50 flex items-center justify-center text-purple-200 font-bold text-sm">RM</div>
+               <div>
+                 <div class="text-white font-medium text-sm">Ryan Martinez</div>
+                 <div class="text-neutral-500 text-xs">CTO @ InnovateAI</div>
+               </div>
+             </div>
+           </div>
+           <div class="w-[400px] glass-card rounded-xl p-6 flex flex-col justify-between shrink-0">
+             <p class="text-neutral-300 font-light leading-relaxed mb-6">"The inbound voice agent handles 500 calls a day seamlessly. It's like printing money."</p>
+             <div class="flex items-center gap-3">
+               <div class="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center text-white font-bold text-sm">JL</div>
+               <div>
+                 <div class="text-white font-medium text-sm">Jessica Lee</div>
+                 <div class="text-neutral-500 text-xs">VP Sales @ GrowthCo</div>
+               </div>
+             </div>
+           </div>
+        </div>
+
+        <!-- Row 2: Right (Reverse) -->
+        <div class="flex animate-marquee-reverse gap-6 w-max pause-on-hover">
+            <!-- Card 5 -->
+            <div class="w-[400px] glass-card rounded-xl p-6 flex flex-col justify-between shrink-0">
+              <p class="text-neutral-300 font-light leading-relaxed mb-6">"I was skeptical about AI voice, but the latency is non-existent. Our customers love it."</p>
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-blue-900/50 flex items-center justify-center text-blue-200 font-bold text-sm">DK</div>
+                <div>
+                  <div class="text-white font-medium text-sm">David Kim</div>
+                  <div class="text-neutral-500 text-xs">Product Lead @ SoftServe</div>
+                </div>
+              </div>
+            </div>
+            <!-- Card 6 -->
+            <div class="w-[400px] glass-card rounded-xl p-6 flex flex-col justify-between shrink-0">
+               <p class="text-neutral-300 font-light leading-relaxed mb-6">"We saved 6 months of development time. Highly recommended for startups needing speed."</p>
+               <div class="flex items-center gap-3">
+                 <div class="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center text-white font-bold text-sm">EP</div>
+                 <div>
+                   <div class="text-white font-medium text-sm">Emma Patel</div>
+                   <div class="text-neutral-500 text-xs">Founder @ NextGen</div>
+                 </div>
+               </div>
+             </div>
+             <!-- Card 7 -->
+             <div class="w-[400px] glass-card rounded-xl p-6 flex flex-col justify-between shrink-0">
+               <p class="text-neutral-300 font-light leading-relaxed mb-6">"The ROI was evident in week 2. The strategy deep-dive alone was worth the investment."</p>
+               <div class="flex items-center gap-3">
+                 <div class="w-10 h-10 rounded-full bg-emerald-900/50 flex items-center justify-center text-emerald-200 font-bold text-sm">TW</div>
+                 <div>
+                   <div class="text-white font-medium text-sm">Tom Wilson</div>
+                   <div class="text-neutral-500 text-xs">COO @ BuildFast</div>
+                 </div>
+               </div>
+             </div>
+             <!-- Card 8 -->
+             <div class="w-[400px] glass-card rounded-xl p-6 flex flex-col justify-between shrink-0">
+               <p class="text-neutral-300 font-light leading-relaxed mb-6">"Their understanding of voice infrastructure is unmatched. Production grade from day one."</p>
+               <div class="flex items-center gap-3">
+                 <div class="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center text-white font-bold text-sm">AY</div>
+                 <div>
+                   <div class="text-white font-medium text-sm">Alex Young</div>
+                   <div class="text-neutral-500 text-xs">Engineer @ VoiceFlow</div>
+                 </div>
+               </div>
+             </div>
+
+             <!-- Duplicate for Loop -->
+             <div class="w-[400px] glass-card rounded-xl p-6 flex flex-col justify-between shrink-0">
+                <p class="text-neutral-300 font-light leading-relaxed mb-6">"I was skeptical about AI voice, but the latency is non-existent. Our customers love it."</p>
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-blue-900/50 flex items-center justify-center text-blue-200 font-bold text-sm">DK</div>
+                  <div>
+                    <div class="text-white font-medium text-sm">David Kim</div>
+                    <div class="text-neutral-500 text-xs">Product Lead @ SoftServe</div>
+                  </div>
+                </div>
+              </div>
+              <div class="w-[400px] glass-card rounded-xl p-6 flex flex-col justify-between shrink-0">
+                 <p class="text-neutral-300 font-light leading-relaxed mb-6">"We saved 6 months of development time. Highly recommended for startups needing speed."</p>
+                 <div class="flex items-center gap-3">
+                   <div class="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center text-white font-bold text-sm">EP</div>
+                   <div>
+                     <div class="text-white font-medium text-sm">Emma Patel</div>
+                     <div class="text-neutral-500 text-xs">Founder @ NextGen</div>
+                   </div>
+                 </div>
+               </div>
+               <div class="w-[400px] glass-card rounded-xl p-6 flex flex-col justify-between shrink-0">
+                 <p class="text-neutral-300 font-light leading-relaxed mb-6">"The ROI was evident in week 2. The strategy deep-dive alone was worth the investment."</p>
+                 <div class="flex items-center gap-3">
+                   <div class="w-10 h-10 rounded-full bg-emerald-900/50 flex items-center justify-center text-emerald-200 font-bold text-sm">TW</div>
+                   <div>
+                     <div class="text-white font-medium text-sm">Tom Wilson</div>
+                     <div class="text-neutral-500 text-xs">COO @ BuildFast</div>
+                   </div>
+                 </div>
+               </div>
+               <div class="w-[400px] glass-card rounded-xl p-6 flex flex-col justify-between shrink-0">
+                 <p class="text-neutral-300 font-light leading-relaxed mb-6">"Their understanding of voice infrastructure is unmatched. Production grade from day one."</p>
+                 <div class="flex items-center gap-3">
+                   <div class="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center text-white font-bold text-sm">AY</div>
+                   <div>
+                     <div class="text-white font-medium text-sm">Alex Young</div>
+                     <div class="text-neutral-500 text-xs">Engineer @ VoiceFlow</div>
+                   </div>
+                 </div>
+               </div>
+          </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="overflow-hidden md:px-10 bg-neutral-950 w-full max-w-7xl border-white/5 border rounded-3xl mt-24 mr-auto mb-12 ml-auto px-10 relative">
+      <div class="md:pt-24 md:pb-12 flex overflow-hidden w-full border-white/5 border-b pt-16 pb-8 items-center justify-center">
+        <h1 class="text-[10vw] md:text-[150px] leading-[0.8] whitespace-nowrap select-none font-semibold text-white/5 tracking-tighter font-manrope [animation:animationIn_0.8s_ease-out_0.2s_both] animate-on-scroll">
+          automate execution
+        </h1>
+      </div>
+
+      <div class="px-6 pt-16 pb-12 md:px-4 relative z-10 [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll">
+        <div class="flex flex-col lg:flex-row justify-between gap-16 lg:gap-12">
+          <!-- CTA Column -->
+          <div class="lg:w-1/2 max-w-2xl flex flex-col items-start justify-center">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight mb-6 leading-[1.1]">
+              <span class="text-white block">Ready to turn "we should automate this" into "it's already handled"?</span>
+            </h2>
+            <div class="flex gap-4 mt-8">
+              <button class="group inline-flex items-center gap-2 bg-white hover:bg-neutral-200 text-black px-6 py-3.5 rounded-full font-medium text-sm transition-all duration-300 hover:scale-[1.02]">
+                <span>Book Discovery Call</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-1">
+                  <path d="M5 12h14"></path>
+                  <path d="m12 5 7 7-7 7"></path>
+                </svg>
+              </button>
+              <button class="inline-flex items-center gap-2 bg-neutral-900 border border-white/10 hover:border-white/20 text-white px-6 py-3.5 rounded-full font-medium text-sm transition-all duration-300">
+                <span>Book Deep-Dive Session</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Links Columns -->
+          <div class="flex flex-col sm:flex-row gap-16 lg:gap-24 lg:mr-10">
+            <div class="flex flex-col gap-5">
+              <h3 class="text-white text-sm font-semibold">Services</h3>
+              <nav class="flex flex-col gap-3">
+                <a href="#" class="text-neutral-400 hover:text-white transition-colors text-sm font-medium">Voice AI</a>
+                <a href="#" class="text-neutral-400 hover:text-white transition-colors text-sm font-medium">MVP Build</a>
+                <a href="#" class="text-neutral-400 hover:text-white transition-colors text-sm font-medium">Strategy</a>
+              </nav>
+            </div>
+            <div class="flex flex-col gap-5">
+              <h3 class="text-white text-sm font-semibold">Company</h3>
+              <nav class="flex flex-col gap-3">
+                <a href="#" class="text-neutral-400 hover:text-white transition-colors text-sm font-medium">About</a>
+                <a href="#" class="text-neutral-400 hover:text-white transition-colors text-sm font-medium">Contact</a>
+                <a href="#" class="text-neutral-400 hover:text-white transition-colors text-sm font-medium">Legal</a>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-xs text-neutral-500 font-medium gap-6 md:gap-4">
+          <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-900 border border-white/5">
+              <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span class="text-neutral-300">Systems Operational</span>
+            </div>
+          </div>
+          <div class="text-center md:text-right">
+            <p>© 2025 Rapidxai Inc.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+</body></html>
